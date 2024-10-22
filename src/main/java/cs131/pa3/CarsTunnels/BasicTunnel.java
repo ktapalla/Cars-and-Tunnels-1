@@ -25,18 +25,29 @@ public class BasicTunnel extends Tunnel{
 	}
 
 	@Override
+	/**
+	 * Checks if a vehicle can enter a tunnel 
+	 * @param vehicle vehicle trying to enter tunnel 
+	 * @return returns a boolean indicating whether the vehicle can enter or not
+	 */
 	protected synchronized boolean tryToEnterInner(Vehicle vehicle) {
+		// empty tunnels can always accept a vehicle
 		if (this.tunnel.isEmpty()) {
 			this.tunnel.add(vehicle);
 			return true;
-		} else if ((vehicle instanceof Car && this.tunnel.get(0) instanceof Car ) && this.tunnel.size() < 3 ) {
+		} 
+		// vehicle is a car and there's less than 3 in the tunnel 
+		else if ((vehicle instanceof Car && this.tunnel.get(0) instanceof Car ) && this.tunnel.size() < 3 ) {
+			// checks if cars are headed in the same/proper direction 
 			if (this.tunnel.get(0).getDirection() == vehicle.getDirection()) {
 				this.tunnel.add(vehicle);
 				return true;				
 			} else {
 				return false;
 			}
-		} else if(vehicle instanceof Sled && this.tunnel.size() < 1) {
+		} 
+		// vehicle is a sled and tunnel doesn't already have a vehicle in it
+		else if(vehicle instanceof Sled && this.tunnel.size() < 1) {
 			this.tunnel.add(vehicle);
 			return true;
 		}
@@ -44,7 +55,12 @@ public class BasicTunnel extends Tunnel{
 	}
 
 	@Override
+	/** 
+	 * Removes a vehicle from a tunnel 
+	 * @param vehicle vehicle being removed from the tunnel 
+	 */
 	protected synchronized void exitTunnelInner(Vehicle vehicle) {
+		// tunnel isn't empty and the vehicle is inside the tunnel 
 		if (!this.tunnel.isEmpty() && this.tunnel.contains(vehicle)) {
 			this.tunnel.remove(vehicle);			
 		}
